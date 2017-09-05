@@ -95,7 +95,7 @@ while runTimes < 10:
         break
         # cls_res_main_n_sel
     else:
-        print('unselected: ' + runTimes)
+        print('unselected: ' + str(runTimes + 1))
         sleep(10)
         runTimes = runTimes + 1
 
