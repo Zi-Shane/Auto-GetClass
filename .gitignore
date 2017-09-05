@@ -1,0 +1,8 @@
+myPassword.py
+__pycache__
+.verify.py
+.vscode
+.DS_Store
+.python-version
+captcha.png
+result.png
