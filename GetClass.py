@@ -2,27 +2,11 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from time import sleep
 from PIL import Image
-from Verify import getPixel, clearNoise, enhance
+from Verify import getPixel, clearNoise, enhance, get_captcha
 import pytesseract
 import myPassword
+import config
 
-def get_captcha(driver, element, path):
-    # now that we have the preliminary stuff out of the way time to get that image :D
-    location = element.location
-    size = element.size
-    # saves screenshot of entire page
-    driver.save_screenshot(path)
-
-    # uses PIL library to open image in memory
-    image = Image.open(path)
-
-    left = location['x'] + 58
-    top = location['y'] + 282
-    right = location['x'] + size['width'] + 120
-    bottom = location['y'] + size['height'] + 302
-
-    image = image.crop((left, top, right, bottom))  # defines crop points
-    image.save(path, 'png')  # saves new cropped image
 
 # 指定 Chromedriver 路徑
 chromedriver = './chromedriver'
@@ -30,7 +14,9 @@ url = 'https://isdna1.yzu.edu.tw/Cnstdsel/Index.aspx'
 # Open Chrome
 browser = webdriver.Chrome(chromedriver)
 browser.get(url)
+sleep(2)
 
+# Login Page
 while True:
     select = Select(browser.find_element_by_id('DPL_SelCosType'))
     select.select_by_index(1)
@@ -40,7 +26,7 @@ while True:
     browser.find_element_by_id('Txt_Password').clear()
     browser.find_element_by_id('Txt_Password').send_keys(myPassword.password)
 
-
+    # Captcha crack
     img = browser.find_element_by_xpath('//*[@id="Panel2"]/table/tbody/tr[2]/td[1]/table[1]/tbody/tr[2]/td[2]/img')
     get_captcha(browser, img, "captcha.png")
     #打開圖片  
@@ -59,8 +45,6 @@ while True:
     # image.save( "./result/result.png" )  
     #顯示圖片
     # image.show()
-
-
     captcha = pytesseract.image_to_string(image).replace(" ", "")
 
     browser.find_element_by_id('Txt_CheckCode').send_keys(captcha)
@@ -78,37 +62,42 @@ while True:
         break
 
 
-sleep(2)
-
+sleep(1)
+# Select Page
 runTimes = 0
-while runTimes < 3:
+while runTimes < 10:
     browser.switch_to_default_content()
+
     browser.switch_to.frame('LeftCosList')
     sleep(1)
     select = Select(browser.find_element_by_id('DPL_DeptName'))
-    select.select_by_value('901')
+    select.select_by_value(config.DepartmentId)
     sleep(1)
     select = Select(browser.find_element_by_id('DPL_Degree'))
-    select.select_by_value('1')
+    select.select_by_value(config.Degree)
     sleep(1)
-    browser.find_element_by_id('SelCos,LS209,A,1,E,2,Y,Chinese,LS209,A,2 生物科技概論').click()
+    browser.find_element_by_id(config.ClassIdentification).click()
 
     a2 = browser.switch_to.alert
     sleep(1)
     a2.accept()
+
     a3 = browser.switch_to.alert
     sleep(1)
     a3.accept()
 
+    # Check if Selected ?
     browser.switch_to_default_content()
     browser.switch_to.frame('frameright')
-    Class = browser.find_element_by_id('111')
+    Class = browser.find_element_by_id(config.ClassTime)
     if Class.get_attribute('class') == 'cls_res_main_c_sel_l':
-        print('Selected')
+        print('Selected: ' + config.ClassIdentification)
         break
         # cls_res_main_n_sel
     else:
-        print('unselected')
+        print('unselected: ' + runTimes)
+        sleep(10)
         runTimes = runTimes + 1
 
+sleep(3)
 browser.close()
