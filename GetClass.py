@@ -65,23 +65,25 @@ while True:
 sleep(1)
 # Select Page
 runTimes = 0
-while runTimes < 10:
+maxTimes = len(config.ClassIdentification)
+while runTimes < maxTimes:
     browser.switch_to_default_content()
 
     browser.switch_to.frame('LeftCosList')
     sleep(1)
     select = Select(browser.find_element_by_id('DPL_DeptName'))
-    select.select_by_value(config.DepartmentId)
+    select.select_by_value(config.DepartmentId[runTimes])
     sleep(1)
     select = Select(browser.find_element_by_id('DPL_Degree'))
-    select.select_by_value(config.Degree)
+    select.select_by_value(config.Degree[runTimes])
+    sleep(2)
+    browser.find_element_by_id(config.ClassIdentification[runTimes]).click()
     sleep(1)
-    browser.find_element_by_id(config.ClassIdentification).click()
-
     a2 = browser.switch_to.alert
     sleep(1)
     a2.accept()
-
+    browser.switch_to.default_content()
+    sleep(1)
     a3 = browser.switch_to.alert
     sleep(1)
     a3.accept()
@@ -89,14 +91,15 @@ while runTimes < 10:
     # Check if Selected ?
     browser.switch_to_default_content()
     browser.switch_to.frame('frameright')
-    Class = browser.find_element_by_id(config.ClassTime)
+    sleep(1)
+    Class = browser.find_element_by_id(config.ClassTime[runTimes])
     if Class.get_attribute('class') == 'cls_res_main_c_sel_l':
-        print('Selected: ' + config.ClassIdentification)
+        print('Selected: ' + config.ClassIdentification[runTimes])
         break
         # cls_res_main_n_sel
     else:
-        print('unselected: ' + str(runTimes + 1))
-        sleep(10)
+        print('unselected' + str(runTimes + 1) + ': '  + config.ClassIdentification[runTimes])
+        sleep(3)
         runTimes = runTimes + 1
 
 sleep(3)

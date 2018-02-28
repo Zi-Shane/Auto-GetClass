@@ -71,10 +71,10 @@ def get_captcha(driver, element, path):
     # uses PIL library to open image in memory
     image = Image.open(path)
 
-    left = location['x'] + 58
-    top = location['y'] + 282
-    right = location['x'] + size['width'] + 120
-    bottom = location['y'] + size['height'] + 302
+    left = location['x'] + 61
+    top = location['y'] + 272
+    right = location['x'] + size['width'] + 117
+    bottom = location['y'] + size['height'] + 282
 
     image = image.crop((left, top, right, bottom))  # defines crop points
     image.save(path, 'png')  # saves new cropped image
