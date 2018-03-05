@@ -4,7 +4,7 @@ from time import sleep
 from PIL import Image
 from Verify import getPixel, clearNoise, enhance, get_captcha
 import pytesseract
-import myPassword
+import password
 import config
 
 
@@ -22,9 +22,9 @@ while True:
     select.select_by_index(1)
 
     browser.find_element_by_id('Txt_User').clear()
-    browser.find_element_by_id('Txt_User').send_keys(myPassword.Account)
+    browser.find_element_by_id('Txt_User').send_keys(password.Account)
     browser.find_element_by_id('Txt_Password').clear()
-    browser.find_element_by_id('Txt_Password').send_keys(myPassword.password)
+    browser.find_element_by_id('Txt_Password').send_keys(password.password)
 
     # Captcha crack
     img = browser.find_element_by_xpath('//*[@id="Panel2"]/table/tbody/tr[2]/td[1]/table[1]/tbody/tr[2]/td[2]/img')

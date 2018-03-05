@@ -73,8 +73,8 @@ def get_captcha(driver, element, path):
 
     left = location['x'] + 61
     top = location['y'] + 272
-    right = location['x'] + size['width'] + 117
-    bottom = location['y'] + size['height'] + 282
+    right = location['x'] + size['width'] + 114
+    bottom = location['y'] + size['height'] + 286
 
     image = image.crop((left, top, right, bottom))  # defines crop points
     image.save(path, 'png')  # saves new cropped image
