@@ -1,6 +1,6 @@
 # get class tool
 ## setting
-cinfig.py, myPassword.py
+cinfig.py, password.sample.py
 ## usage 
 1. install requirements  
 ```pip install -r requirements.txt```
